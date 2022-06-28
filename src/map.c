@@ -32,6 +32,7 @@ map * map_new(size_t key_size)
 {
   return map_new_custom_alloc(malloc, free, key_size);
 }
+#endif//NO_STDLIB
 
 map * map_new_custom_alloc(alloc_t alloc, dealloc_t dealloc, size_t key_size)
 {
@@ -55,7 +56,6 @@ map * map_new_custom_alloc(alloc_t alloc, dealloc_t dealloc, size_t key_size)
 
   return m;
 }
-#endif//NO_STDLIB
 
 size_t map_size(map * m)
 {
