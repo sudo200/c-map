@@ -16,7 +16,7 @@ struct map
   dealloc_t dealloc;
 };
 
-void * resize(alloc_t alloc, dealloc_t dealloc, void * ptr, size_t bytes_to_copy, size_t bytes_to_alloc)
+void * __resize(alloc_t alloc, dealloc_t dealloc, void * ptr, size_t bytes_to_copy, size_t bytes_to_alloc)
 {
   void * newptr = memmove(
         alloc(bytes_to_alloc),
@@ -74,7 +74,7 @@ map * map_add(map * m, void * key, void * value)
 
   const size_t size = map_size(m);
 
-  m->pairs = resize(
+  m->pairs = __resize(
         m->alloc,
         m->dealloc,
         m->pairs,
@@ -109,6 +109,42 @@ void * map_get(map * m, void * key)
       return p->value;
   
   return NULL;
+}
+
+void * map_remove(map * m, void * key)
+{
+  if(m == NULL)
+    return NULL;
+
+  const size_t size = map_size(m);
+
+  pair *p = m->pairs;
+  for(; * (int *) p; p++)
+    if(
+        m->key_size == 0
+        ? strcmp((const char *) p->key, (const char *) key) == 0
+        : memcmp(p->key, key, m->key_size) == 0
+      )
+      goto here;
+  return NULL;
+
+  here:;
+
+  const size_t index = p - m->pairs;
+  void * value = p->value;
+
+  for(size_t i = index; i < size; i++)
+    m->pairs[i] = m->pairs[i + 1];
+
+  m->pairs = __resize(
+        m->alloc,
+        m->dealloc,
+        m->pairs,
+        (size - 1) * sizeof(pair),
+        (size - 1) * sizeof(pair)
+      );
+
+  return value;
 }
 
 int map_contains_key(map * m, void * key)

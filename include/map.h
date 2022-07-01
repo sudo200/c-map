@@ -57,6 +57,12 @@ map * map_add(map * m, void * key, void * value);
 void * map_get(map * m, void * key);
 
 /**
+ * Removes the value behind given key.
+ * Returns the value on success, NULL otherwise.
+ */
+void * map_remove(map * m, void * key);
+
+/**
  * Return true, if the given key exists.
  * Returns false otherwise.
  */

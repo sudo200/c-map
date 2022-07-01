@@ -1,5 +1,11 @@
 #!/bin/sh
 
-gcc -o out/map -I include -pedantic -Wall -std=c99 test/*.c src/*.c
-#rm *.gch
+if [ -d out ];
+then
+  false;
+else
+  mkdir out/;
+fi
+
+cc -g -I'include' -o out/map -pedantic -Wall -std=c99 src/*.c test/*.c
 

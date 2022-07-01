@@ -26,6 +26,8 @@ int main(int argc, char **argv)
 
   printf("Size after adding elements: %lu\n", map_size(mymap));
 
+  printf("Removed element: %s\n", (const char *) map_remove(mymap, argv[1]));
+
   printf("Element with key \"%s\" exists: %s\n", argv[1], map_contains_key(mymap, argv[1]) ? "Yes" : "No");
   printf("Element with key \"%s\": %s\n", argv[1], (const char *) map_get(mymap, argv[1]));
 
